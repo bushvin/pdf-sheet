@@ -538,7 +538,7 @@ function() {
                 .map(i => i.name).join(', ')
         },
         { "pdf": "1_ancestry_feat", "foundry": actordata.items.filter(i => i.type === 'feat' && i.system.location === 'ancestry-1').map(i => i.name)[0] || '' },
-        { "pdf": "1_background_skill_feat" , "foundry": actordata.background.system.items[Object.keys(actordata.background.system.items)[0]].name },
+        { "pdf": "1_background_skill_feat" , "foundry": (Object.keys(actordata.background.system.items).length > 0 ? actordata.background.system.items[Object.keys(actordata.background.system.items)[0]].name : '') },
         { "pdf": "2_skill_feat", "foundry": actordata.items.filter(i => i.type === 'feat' && i.system.location === 'skill-2').map(i => i.name)[0] || '' },
         { "pdf": "3_general_feat", "foundry": actordata.items.filter(i => i.type === 'feat' && i.system.location === 'general-3').map(i => i.name)[0] || '' },
         { "pdf": "4_skill_feat", "foundry": actordata.items.filter(i => i.type === 'feat' && i.system.location === 'skill-4').map(i => i.name)[0] || '' },
