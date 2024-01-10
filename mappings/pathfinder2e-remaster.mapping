@@ -464,8 +464,7 @@ function() {
         /* Lore Skills */
         /* Dedicated for loop at the end*/
 
-        /* Languages Section */
-        { "pdf": "languages", "foundry": actordata.system.traits.languages.value.concat([actordata.system.traits.languages.custom]).filter(function(a) {return a.trim() != ''}).join(", ") },
+        /* Languages Section at the end */
 
         /* Perception Section  */
         { "pdf": "perception", "foundry": format_mod(actordata.perception.mod) },
@@ -477,7 +476,7 @@ function() {
         { "pdf": "perception_master", "foundry": actordata.perception.rank >= 3 || '' },
         { "pdf": "perception_legendary", "foundry": actordata.perception.rank >= 4 || '' },
 
-        { "pdf": "senses_notes", "foundry": actordata.system.traits.senses.filter(i => i.type).map(i => i.label).join(", ") + ' \n' + actordata.system.attributes.perception.modifiers.filter(i => i.type === 'item' || i.type === 'untyped').map(i => ' ' + (i.slug ? i.slug : i.label) + ' ' + (i.modifier < 0 ? '' : '+') + i.modifier).join(", ") },
+        /* Senses notes at the end */
 
         /* Speed Section */
         { "pdf": "speed", "foundry":
@@ -816,6 +815,19 @@ function() {
     skill_notes.push("Assurance: " + actordata.items.filter(i=>i.slug==="assurance").map(i=>i.rules.filter(f=>f.prompt==="PF2E.SpecificRule.Prompt.Skill").map(m=>m.selection)).flat(1).map(i=>ucfirst(i)).join(", "));
     ret.push({ "pdf": "skill_notes", "foundry": skill_notes.join("\n") });
 
+    /* Languages Section */
+    if (actordata.system.details.languages !== undefined) {
+        ret.push({ "pdf": "languages", "foundry": actordata.system.details.languages.value.filter(function(a) {return a.trim() != ''}).join(", ") });
+    } else {
+        ret.push({ "pdf": "languages", "foundry": actordata.system.traits.languages.value.concat([actordata.system.traits.languages.custom]).filter(function(a) {return a.trim() != ''}).join(", ") });
+    }
+
+    /* sense_notes*/
+    if (actordata.system.perception.senses !== undefined) {
+        ret.push({ "pdf": "senses_notes", "foundry": actordata.system.perception.senses.filter(i => i.type).map(i => i.label).join(", ") + ' \n' + actordata.system.perception.modifiers.filter(i => i.type === 'item' || i.type === 'untyped').map(i => ' ' + (i.slug ? i.slug : i.label) + ' ' + (i.modifier < 0 ? '' : '+') + i.modifier).join(", ") });
+    } else {
+        ret.push({ "pdf": "senses_notes", "foundry": actordata.system.traits.senses.filter(i => i.type).map(i => i.label).join(", ") + ' \n' + actordata.system.attributes.perception.modifiers.filter(i => i.type === 'item' || i.type === 'untyped').map(i => ' ' + (i.slug ? i.slug : i.label) + ' ' + (i.modifier < 0 ? '' : '+') + i.modifier).join(", ") });
+    }
     /* Strikes */
     /* Melee strikes range from 0-2 */
     actordata.system.actions.filter(i => i.type === "strike" && (i.domains.includes("melee-attack-roll") || i.altUsages.filter(f => f.domains.includes('melee-attack-roll')).length > 0))
